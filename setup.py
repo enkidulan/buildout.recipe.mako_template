@@ -45,7 +45,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/enkidulan/buildout.recipe.mako_template',
-    version='0.1.0',
+    version='0.1.1.dev0',
     zip_safe=False,
     py_modules=['buildout.recipe.mako_template'],
     entry_points={"zc.buildout": ["default=buildout.recipe.mako_template:Recipe"]},
