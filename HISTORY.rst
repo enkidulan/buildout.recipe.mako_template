@@ -2,10 +2,14 @@
 History
 =======
 
-0.1.1 (unreleased)
+0.1.1 (2018-03-13)
 ------------------
 
-- Nothing changed yet.
+- Fix packaging issue.
+  [enkidulan]
+
+- Update docs, add more examples, add badges.
+  [enkidulan]
 
 
 0.1.0 (2018-03-12)
