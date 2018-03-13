@@ -1,20 +1,25 @@
 import os
 import stat
 from mako.lookup import TemplateLookup
-import zc.buildout
+from zc.buildout import UserError
 
 
 class Recipe:
-    """ Buildout recipe for making files out of Mako templates.
+    """Buildout recipe for making files out of Mako templates.
 
-    All part options are directly available to the template. In addition, all options from all
-    parts listed in the buildout section pluss the options from the buildout
-    section itself are available to the templates through parts.<part>.<key>.
-    If an eggs option is defined, the egg references are transformed into a
-    pkg_resources.WorkingSet object before given to the template.
+    All part options are directly available to the template. In addition,
+    all options from all buildout parts are available to the templates
+    through ``parts[<part>][<key>]``.
     """
 
     def __init__(self, buildout, name, options):
+        """Prepare recipe, any issue with options will be resolved on this step.
+
+        On this step:
+        * parse ``directories`` option and resolve paths,
+        * parse``files`` option, detect collision, resolve targets paths.
+        * create Makos ``lookup`` object with provided ``directories`` as a parameter
+        """
         self.buildout = buildout
         self.options = options
         self.files = _parse_files_option(options.get('files'))
@@ -23,6 +28,7 @@ class Recipe:
         self.lookup = TemplateLookup(directories=directories)
 
     def install(self):
+        """One by one render ``template`` and write result to ``destination``."""
         kwargs = dict(self.options)
         kwargs.setdefault('parts', dict(self.buildout))
         for template, target, is_executable in self.files:
@@ -37,25 +43,68 @@ class Recipe:
 
 
 def _parse_list_values(value):
+    """Transform string `values` into list of striped lines, remove empty lines.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> value = ' a \\n \\n b \\n'
+        >>> list(_parse_list_values(value))
+        ['a', 'b']
+
+    """
     items = (i.strip() for i in value.strip().split('\n'))
     items = (i for i in items if i)
     return items
 
 
 def _parse_directories_option(value):
+    """Parse string value and return a list of resolved absolute paths.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import os; os.chdir('/tmp')
+        >>> _parse_directories_option('/data')
+        ['/data']
+        >>> _parse_directories_option('data')
+        ['/tmp/data']
+
+    """
     directories = (os.path.abspath(i) for i in _parse_list_values(value))
     return list(directories)
 
 
 def _parse_files_option(value):
-    """
-    Goals:
-        * split input
-        * resolve 'target' it to abspath
-        * isExecutable?
-        * acknowledge overwrites or same template reuse (marker ":overwrite"")
+    """Transform string `values` into list of source-target files, detect collisions.
 
-    return [('template', 'target', 'isExecutable'), ]
+    Input format:
+
+    .. code-block::
+
+        source : target [: is_executable(true or false)[ :collision_allowed(just a flag))]]
+        ...
+
+    Output format is following:
+
+    .. code-block:: python
+
+        [(template, target_resolved_abs_path, is_executable), ...]
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import os; os.chdir('/tmp')
+        >>> _parse_files_option('a:b:yes')
+        [('a', '/tmp/b', True)]
+        >>> _parse_files_option('a:/b')
+        [('a', '/b', False)]
+        >>> _parse_files_option('a:/b::collision_allowed')
+        [('a', '/b', False)]
+
     """
     sources = set()
     targets = set()
@@ -65,7 +114,7 @@ def _parse_files_option(value):
         options = tuple(i.strip() for i in line.split(':'))
 
         if not (1 < len(options) < 5):
-            raise zc.buildout.UserError(
+            raise UserError(
                 "Malformed file option '{}'\nallowed format is "
                 "'source:target[:is_executable(true or false)[:collision_allowed]]'"
                 "".format(line)
@@ -77,12 +126,10 @@ def _parse_files_option(value):
         collision_allowed = len(options) > 3 and options[3] == 'collision_allowed'
 
         if not collision_allowed and source in sources:
-            raise zc.buildout.UserError(
-                "Template collision is detected at '{}'".format(line))
+            raise UserError("Template collision is detected at '{}'".format(line))
 
         if not collision_allowed and target in targets:
-            raise zc.buildout.UserError(
-                "Target collision is detected at '{}'".format(line))
+            raise UserError("Target collision is detected at '{}'".format(line))
 
         sources.add(source)
         targets.add(target)
@@ -92,4 +139,21 @@ def _parse_files_option(value):
 
 
 def _to_bool(value):
+    """Transform string value to bool.
+
+    Return `True` is input `value` is "yes" or "true", or "1" or "on",
+    return `False` for all other cases.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> _to_bool('yes')
+        True
+        >>> _to_bool('no')
+        False
+        >>> _to_bool('')
+        False
+
+    """
     return value.lower() in ("yes", "true", "1", "on")
