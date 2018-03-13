@@ -1,18 +1,10 @@
 language: python
 python:
 - 3.6
+- 3.5
+- 3.4
 - 2.7
 install:
     pip install -U tox-travis python-coveralls
 script: tox
 after_success: coveralls
-deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  user: enkidulan
-  password:
-    secure: AzRqys8x1GDQ0okMcy9uPNU9+bp3FbnN9qEPZAG1yL1b3Ux8M0QCG90ZRuGGK3TrIwklfe9TRFmG/OHcr+zZAVSJ9WL18PlkiLCeGktUl/Jo60nJ78sSW1U7/nYE3AxrMPX2A2fYVE6imITvxxdsdFaXcA8V5MIBRdN7e8NgTi5zHq/D8bemateDHuvZTYFWuH/u66wQyWn+QkNLA36z+iE4ba3RPu5PeqTLa6FydrVbZH0TsP3xElgr8lJxl+zbuNYcV0AVRTtyUVyBxV3jDqgxGzAiIAG8E8dqiuDG0Q0lrUrPe+XwUlVf/+woJmVr0utF5YP7P5qtMoW/o5gsbi8qnGLRgPJIGhDdf4yOPU5wOCh8d8DNZZdjvlGMK20pPfrXR0PGBdGA7d6QJjS9kBFAiOwQUfEZeW412+1z5GXKS+mWL2cVmKNhqBFjPQg2SEgk74YyglbWE1SpJ4HwwO3P/RaZJZdTpFXRpw744i4lKAhgUvCu0R7pjmR290j/G46oImI/QC1Z4PaV/tR8BubkjpuWQ1Uul92HogZW/TkpePvu7Kxni+MTWv5vw+huitBY4PhFR49ahl9OI+pZKhX7te7cekTLEBsjVwJWF+4BS4+WTIm+QisyOK0144FWZb3j1Lk319a6uVY8N1rNn1c5uk5wH0Vo8SJpRWzawU8=
-  on:
-    tags: true
-    repo: enkidulan/buildout.recipe.mako_template
-    python: 3.6
