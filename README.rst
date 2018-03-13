@@ -98,7 +98,7 @@ Collision detection
 ===================
 
 Cases where one's template target are overridden by another template
-are detected automatically. For example:
+are detected automatically. For example, case:
 
 .. code-block:: ini
 
@@ -106,5 +106,12 @@ are detected automatically. For example:
         foo_1.sh.mako : foo_1.sh
         foo_2.sh.mako : foo_1.sh  # overwrites ``target`` form above
 
-In some cases, it may be a desirable behavior, so it's possible to allow
+will result in a build fail with the message:
+
+.. code-block:: bash
+
+    Target collision is detected at 'foo_2.sh.mako : foo_1.sh'
+
+
+Yet in some cases, it may be a desirable behavior, so it's possible to allow
 overwriting by adding ``collision_allowed`` flag.
