@@ -4,6 +4,14 @@
 .. image:: https://img.shields.io/travis/enkidulan/buildout.recipe.mako_template.svg
         :target: https://travis-ci.org/enkidulan/buildout.recipe.mako_template
 
+.. image:: https://api.codeclimate.com/v1/badges/260655c1feb4cf8cd6bb/maintainability
+   :target: https://codeclimate.com/github/enkidulan/buildout.recipe.mako_template/maintainability
+   :alt: Maintainability
+
+.. image:: https://api.codeclimate.com/v1/badges/260655c1feb4cf8cd6bb/test_coverage
+   :target: https://codeclimate.com/github/enkidulan/buildout.recipe.mako_template/test_coverage
+   :alt: Test Coverage
+
 *****************************
 buildout.recipe.mako_template
 *****************************

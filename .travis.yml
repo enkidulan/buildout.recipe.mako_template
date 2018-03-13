@@ -1,10 +1,20 @@
 language: python
+env:
+  global:
+    - CC_TEST_REPORTER_ID=88f0e899a67dc88387e45deac61835b7bdffc89af65645a315ccb73195d1841d
 python:
 - 3.6
 - 3.5
 - 3.4
 - 2.7
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 install:
     pip install -U tox-travis python-coveralls
 script: tox
-after_success: coveralls
+after_script:
+  - coverage xml
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+
