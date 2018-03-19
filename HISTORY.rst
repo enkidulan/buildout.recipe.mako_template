@@ -5,6 +5,7 @@ History
 0.1.2 (unreleased)
 ------------------
 
+- Add creating of a destination file containing folder if not exists.
 - Add contents and useful links to ``readme.rst``.
 - Add coverage checking to ``make test`` command.
   [enkidulan]

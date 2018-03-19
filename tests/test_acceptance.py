@@ -16,7 +16,7 @@ def test_simple_usecase(buildout_dir):
 
 def test_ineritance(buildout_dir):
     zc.buildout.buildout.main(["-NU", "install", 'inerit-test'])
-    with open("inerit-test-template.out") as f:
+    with open("folder/inerit-test-template.out") as f:
         out = f.read()
     assert out == 'Hi! This is base0 template!\n    inheriting block\ninheriting body\nAnd this is it, base0 template ends here...\n'
 

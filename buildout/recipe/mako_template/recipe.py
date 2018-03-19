@@ -1,4 +1,5 @@
 import os
+import os.path
 import stat
 from mako.lookup import TemplateLookup
 from zc.buildout import UserError
@@ -33,6 +34,7 @@ class Recipe:
         kwargs.setdefault('parts', dict(self.buildout))
         for template, target, is_executable in self.files:
             self.options.created(target)
+            _ensure_containing_directory_exist(target)
             with open(target, "w") as f:
                 f.write(self.lookup.get_template(template).render(**kwargs))
             if is_executable:
@@ -40,6 +42,13 @@ class Recipe:
         return self.options.created()
 
     update = install
+
+
+def _ensure_containing_directory_exist(file_path):
+    """Ensures existing of a containing directory for a given file path."""
+    containing_directory = os.path.dirname(file_path)
+    if not os.path.exists(containing_directory):
+        os.makedirs(containing_directory)
 
 
 def _parse_list_values(value):
