@@ -5,6 +5,7 @@ History
 0.1.2 (unreleased)
 ------------------
 
+- Add contents and useful links to ``readme.rst``.
 - Add coverage checking to ``make test`` command.
   [enkidulan]
 

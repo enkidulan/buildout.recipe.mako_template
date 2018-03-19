@@ -19,6 +19,8 @@ buildout.recipe.mako_template
 A buildout recipe for making files out of Mako templates, with focus on
 manageability of large number of templates.
 
+.. contents::
+
 The reasons behind creating this 'another' template recipe for buildout are wish of having:
 
 * ``mako`` with all power of python and good scoping in templates,
@@ -123,3 +125,16 @@ will result in a build fail with the message:
 
 Yet in some cases, it may be a desirable behavior, so it's possible to allow
 overwriting by adding ``collision_allowed`` flag.
+
+
+Links and Credits
+=================
+
+This recipe is heavily inspired by `brodul.recipe.template`_.
+
+To get more examples and information on using mako templates visit `makotemplates`_.
+
+
+.. _makotemplates: http://www.makotemplates.org/
+.. _brodul.recipe.template: http://pypi.org/project/brodul.recipe.template/
+
