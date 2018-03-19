@@ -53,7 +53,7 @@ lint: ## check style with flake8
 	flake8 buildout tests
 
 test: ## run tests quickly with the default Python
-	py.test --doctest-modules
+	py.test --doctest-modules --cov=buildout.recipe.mako_template --cov-fail-under=100
 
 test-all: ## run tests on every Python version with tox
 	tox

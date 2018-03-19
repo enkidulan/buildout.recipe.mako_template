@@ -5,7 +5,8 @@ History
 0.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add coverage checking to ``make test`` command.
+  [enkidulan]
 
 
 0.1.1 (2018-03-13)
