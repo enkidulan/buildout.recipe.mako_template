@@ -2,7 +2,7 @@
 History
 =======
 
-0.1.2 (unreleased)
+0.1.2 (2018-03-19)
 ------------------
 
 - Add creating of a destination file containing folder if not exists.
